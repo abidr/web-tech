@@ -9,7 +9,7 @@ include 'controls/action.php';
   </head>
   <body>
     <h1>Merchant Registration</h1>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
       <table>
         <tbody>
           <tr>
@@ -84,6 +84,13 @@ include 'controls/action.php';
             </td>
           </tr>
           <tr>
+            <td>Business Logo</td>
+            <td>
+              <input type="file" name="logo" id="logo" />
+              <span class="error" id="logo_error"><?php echo $logoError; ?></span>
+            </td>
+          </tr>
+          <tr>
             <td>
             <input type="checkbox" id="agree_terms" name="agree_terms" value="agree" />
             <label for="agree_terms">I agree to all terms and conditions</label><br>
@@ -94,6 +101,7 @@ include 'controls/action.php';
             <td>
               <button type="submit" name="submit">Register</button>
               <p class="success"><?php echo $successMessage; ?></p>
+              <p class="error"><?php echo $errorMessage; ?></p>
             </td>
           </tr>
         </tbody>

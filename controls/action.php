@@ -1,4 +1,6 @@
 <?php 
+  include 'model/db.php';
+
   $firstNameError = "";
   $lastNameError = "";
   $emailError = "";
@@ -9,8 +11,12 @@
   $businessNameError = "";
   $businessTypeError = "";
   $termsError = "";
+  $logoError = "";
+
+  $db = new Db();
 
   $successMessage = "";
+  $errorMessage = "";
 
   if(isset($_POST['submit'])) {
     $firstName = $_POST['first_name'];
@@ -23,6 +29,7 @@
     $businessName = $_POST['business_name'];
     $businessType = $_POST['business_type'];
     $terms = isset($_POST['agree_terms']) ? $_POST['agree_terms'] : null;
+    $logo = isset($_FILES['logo']) ? $_FILES['logo'] : null;
 
     $firstNameError = empty($firstName) ? "First name is required" : "";
     $lastNameError = empty($lastName) ? "Last name is required" : "";
@@ -34,6 +41,7 @@
     $businessNameError = empty($businessName) ? "Business name is required" : "";
     $businessTypeError = empty($businessType) ? "Business type is required" : "";
     $termsError = empty($terms) ? "You must accept the terms and conditions" : "";
+    $logoError = empty($logo) ? "Logo is required": "";
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $emailError = "Invalid email format";
@@ -45,8 +53,21 @@
       $termsError = "You must accept the terms and conditions";
     }
     
-    if (empty($firstNameError) && empty($lastNameError) && empty($emailError) && empty($passwordError) && empty($phoneError) && empty($dobError) && empty($genderError) && empty($businessNameError) && empty($businessTypeError) && empty($termsError)) {
-      $successMessage = "Registration successful!";
+    if (empty($firstNameError) && empty($lastNameError) && empty($emailError) && empty($passwordError) && empty($phoneError) && empty($dobError) && empty($genderError) && empty($businessNameError) && empty($businessTypeError) && empty($termsError) && empty($logoError)) {
+      $extension = pathinfo($_FILES["logo"]["name"], PATHINFO_EXTENSION);
+      $target_name = uniqid() . '.' . $extension;
+      $target_file = "uploads/" . $target_name;
+
+      if (move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file)) {
+        if($db->insertMerchant($firstName, $lastName, $email, $password, $phone, $dob, $gender, $businessName, $businessType, $target_name) === true) {
+          $successMessage = "Registration successful!";
+        } else {
+          $errorMessage = $db->conn->error;
+        }
+      } else {
+        $errorMessage = "Sorry, there was an error uploading your file.";
+      }
+
     }
   }
 ?>
