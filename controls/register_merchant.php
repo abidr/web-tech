@@ -1,5 +1,5 @@
 <?php 
-  include 'model/db.php';
+  include '../model/db.php';
 
   $firstNameError = "";
   $lastNameError = "";
@@ -56,7 +56,7 @@
     if (empty($firstNameError) && empty($lastNameError) && empty($emailError) && empty($passwordError) && empty($phoneError) && empty($dobError) && empty($genderError) && empty($businessNameError) && empty($businessTypeError) && empty($termsError) && empty($logoError)) {
       $extension = pathinfo($_FILES["logo"]["name"], PATHINFO_EXTENSION);
       $target_name = uniqid() . '.' . $extension;
-      $target_file = "uploads/" . $target_name;
+      $target_file = "../uploads/" . $target_name;
 
       if (move_uploaded_file($_FILES["logo"]["tmp_name"], $target_file)) {
         if($db->insertMerchant($firstName, $lastName, $email, $password, $phone, $dob, $gender, $businessName, $businessType, $target_name) === true) {

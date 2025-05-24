@@ -21,6 +21,16 @@ class Db {
         return $this->conn->error;
       }
     }
+    public function loginMerchant($email, $password) {
+      $sql = "SELECT * FROM merchants WHERE email = '$email' AND password = '$password'";
+      $result = $this->conn->query($sql);
+      if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row; // Return the merchant data
+      } else {
+        return false; // No matching merchant found
+      }
+    }
 
     public function close() {
       $this->conn->close();
