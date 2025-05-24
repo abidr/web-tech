@@ -29,6 +29,23 @@ function validateEmail() {
   }
   return true;
 }
+function validateAmount() {
+  let amount = document.getElementById('amount').value;
+  let amountError = document.getElementById('amount_error');
+  if (amount === '') {
+    amountError.innerHTML = 'Amount is required.';
+    return false;
+  }
+  if (isNaN(amount)) {
+    amountError.innerHTML = 'Only numbers are allowed.';
+    return false;
+  }
+  if (amount <= 0) {
+    amountError.innerHTML = 'Amount must be greater than zero.';
+    return false;
+  }
+  return true;
+}
 function validatePassword() {
   let password = document.getElementById('password').value;
   let passwordError = document.getElementById('password_error');
@@ -107,5 +124,69 @@ function validateAgreeTerms() {
 }
 
 function validateForm() {
-  return validateFirstName() && validateLastName() && validateEmail() && validatePassword() && validatePhone() && validateDob() && validateGender() && validateBusinessName() && validateBusinessType() && validateAgreeTerms();
+  if(validateFirstName() && validateLastName() && validateEmail() && validatePhone() && validateDob() && validateGender() && validateBusinessName() && validateBusinessType()) {
+    updateProfile();
+    return false;
+  };
+    return false;
+}
+function validateFormTransfer() {
+  if(validateEmail() && validateAmount()) {
+    sendTransfer();
+    return false;
+  };
+    return false;
+}
+function deleteTransaction(transactionId) {
+    // Confirm deletion
+    if (confirm("Are you sure you want to delete this transaction?")) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // If the response is successful, remove the transaction from the DOM
+                let transactionElement = document.getElementById("trx-" + transactionId);
+                transactionElement.remove();
+            } else if (this.readyState == 4) {
+                alert("Error deleting transaction. Please try again.");
+            }
+          }
+        xhttp.open("POST", "../controls/delete_transaction.php", true);
+        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhttp.send("transactionId=" + transactionId);
+    }
+}
+
+function updateProfile() {
+    let form = document.getElementById('profileForm');
+    let formData = new FormData(form);
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById('profile_success').innerHTML = "Profile updated successfully!";
+        } else if (this.readyState == 4) {
+            document.getElementById('profile_error').innerHTML = "Error updating profile. Please try again.";
+        }
+    }
+    xhttp.open("POST", "../controls/profile_merchant.php", true);
+    xhttp.send(formData);
+}
+
+function sendTransfer() {
+    let form = document.getElementById('transferForm');
+    let formData = new FormData(form);
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById('transfer_success').innerHTML = 'Money transfer successful!';
+            jsonData = JSON.parse(this.response);
+            document.getElementById('available_balance').innerHTML = jsonData.balance;
+            document.getElementById('transferForm').reset();
+            document.getElementById('transfer_error').innerHTML = '';
+        } else if (this.readyState == 4) {
+            document.getElementById('transfer_error').innerHTML = this.response;
+            document.getElementById('transfer_success').innerHTML = '';
+        }
+    }
+    xhttp.open("POST", "../controls/transfer_merchant.php", true);
+    xhttp.send(formData);
 }

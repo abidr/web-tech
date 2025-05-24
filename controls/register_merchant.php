@@ -1,6 +1,10 @@
 <?php 
   include '../model/db.php';
 
+  if (isset($_SESSION['email'])) {
+    header("Location: ../views/dashboard_merchant.php");
+  }
+
   $firstNameError = "";
   $lastNameError = "";
   $emailError = "";

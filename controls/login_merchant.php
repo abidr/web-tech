@@ -1,6 +1,9 @@
 <?php 
   include '../model/db.php';
-  
+  if (isset($_SESSION['email'])) {
+    header("Location: ../views/dashboard_merchant.php");
+  }
+
   $emailError = "";
   $passwordError = "";
 
@@ -25,9 +28,9 @@
     if (empty($emailError) && empty($passwordError)) {
       $loginData = $db->loginMerchant($email, $password);
       if($loginData) {
-        session_start();
+        $_SESSION['id'] = $loginData['id'];
         $_SESSION['email'] = $loginData['email'];
-        header("Location: ../views/merchant_dashboard.php");
+        header("Location: ../views/dashboard_merchant.php");
       } else {
         $errorMessage = "Invalid email or password";
       }

@@ -25,11 +25,10 @@ if (isset($_SESSION['email'])) {
         if ($loggedIn) {
         ?>
         <ul>
-          <li><a href="">Dashboard</a></li>
-          <li><a href="">Transactions</a></li>
-          <li><a href="">Transfer</a></li>
-          <li><a href="">Bank</a></li>
-          <li><a href="">Profile</a></li>
+          <li><a href="./dashboard_merchant.php">Dashboard</a></li>
+          <li><a href="./trx_merchant.php">Transactions</a></li>
+          <li><a href="./transfer_merchant.php">Transfer</a></li>
+          <li><a href="./profile_merchant.php">Profile</a></li>
           <li><a href="../controls/logout_merchant.php">Logout</a></li>
         </ul>
         <?php 

@@ -1,10 +1,10 @@
 <?php 
-include '../controls/register_merchant.php';
 
 $pageTitle = "Merchant Registration";
 include './parts/merchant_header.php';
+include '../controls/register_merchant.php';
 ?>
-<div class="form">
+<div class="container">
   <h1>Merchant Registration</h1>
   <form action="" method="POST" enctype="multipart/form-data">
     <table>
