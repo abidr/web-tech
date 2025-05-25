@@ -1,4 +1,4 @@
-<?php include 'control/action.php'; ?>
+<?php include 'controls/action.php'; ?>
 <!DOCTYPE html>
 <html>
 <head>

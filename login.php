@@ -1,4 +1,4 @@
-<?php include 'control/login_action.php'; ?>
+<?php include 'controls/login_action.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
